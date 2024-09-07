@@ -37,3 +37,15 @@ GROUP BY year, month, country
 ORDER BY country ASC;
 
 
+-- Create a DVD return status view
+CREATE VIEW dvd_return_status AS
+SELECT CASE
+           WHEN r.return_date IS NULL THEN 'Not Yet Returned'
+           WHEN r.return_date <= r.rental_date + INTERVAL '1 day' * f.rental_duration THEN 'Returned Early'
+           WHEN r.return_date > r.rental_date + INTERVAL '1 day' * f.rental_duration THEN 'Returned Late'
+       END AS return_status,
+	   COUNT(*) AS Total_film
+FROM rental r
+JOIN inventory i ON r.inventory_id = i.inventory_id
+JOIN film f ON i.film_id = f.film_id
+GROUP BY return_status;
