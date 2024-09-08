@@ -53,19 +53,12 @@ synthetic_data = generate_demographic_data_with_constraints(num_records, age_ran
 # Convert to DataFrame
 df = pd.DataFrame(synthetic_data)
 
-# # Save the DataFrame to a CSV file
-# csv_filename = 'synthetic_demographic_data_with_constraints.csv'
-# df.to_csv(csv_filename, index=False)
-
-# print(f"Data saved to {csv_filename}")
-# print(df.head())
-
 # Database connection settings
 username = 'postgres'  # Replace with your PostgreSQL username
 password = '123456'  # Replace with your PostgreSQL password
 host = 'localhost'  # Replace with your PostgreSQL host, if needed
 port = '5432'  # Replace with your PostgreSQL port, if needed
-database = 'postgres'  # Replace with your PostgreSQL database name
+database = 'demographic'  # Replace with your PostgreSQL database name
 
 # Create an SQLAlchemy engine
 connection_string = f'postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}'
