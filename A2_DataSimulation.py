@@ -1,5 +1,6 @@
 import random
 import pandas as pd
+from sqlalchemy import create_engine
 from faker import Faker
 from scipy.stats import norm
 
@@ -52,9 +53,29 @@ synthetic_data = generate_demographic_data_with_constraints(num_records, age_ran
 # Convert to DataFrame
 df = pd.DataFrame(synthetic_data)
 
-# Save the DataFrame to a CSV file
-csv_filename = 'synthetic_demographic_data_with_constraints.csv'
-df.to_csv(csv_filename, index=False)
+# # Save the DataFrame to a CSV file
+# csv_filename = 'synthetic_demographic_data_with_constraints.csv'
+# df.to_csv(csv_filename, index=False)
 
-print(f"Data saved to {csv_filename}")
-print(df.head())
+# print(f"Data saved to {csv_filename}")
+# print(df.head())
+
+# Database connection settings
+username = 'postgres'  # Replace with your PostgreSQL username
+password = '123456'  # Replace with your PostgreSQL password
+host = 'localhost'  # Replace with your PostgreSQL host, if needed
+port = '5432'  # Replace with your PostgreSQL port, if needed
+database = 'postgres'  # Replace with your PostgreSQL database name
+
+# Create an SQLAlchemy engine
+connection_string = f'postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}'
+engine = create_engine(connection_string)
+
+# Table name in the PostgreSQL database
+table_name = 'demographic_data'
+
+# Ingest the data into the PostgreSQL table
+# If the table does not exist, it will be created; data will be appended if table exists
+df.to_sql(table_name, engine, index=False, if_exists='replace')  # Use 'append' instead of 'replace' to add without replacing
+
+print(f"Data has been ingested into the '{table_name}' table in your PostgreSQL database.")
